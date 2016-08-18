@@ -5,6 +5,10 @@
  * file that was distributed with this source code.
  */
 
+ function _deployerSendSlackMessage() {
+
+ }
+
 /**
  * Get local username
  */
@@ -24,11 +28,12 @@ task('deploy:slack', function () {
         'username' => 'Deploy',
         'message'  => "Deployment to `{{host}}` on *{{stage}}* was successful\n({{release_path}})",
         'app'      => 'app-name',
+        'base_uri' => 'https://slack.com/api/chat.postMessage',
     ];
 
     $config = array_merge($defaultConfig, (array) get('slack', []));
 
-    if (!is_array($config) || !isset($config['token']) || !isset($config['team']) || !isset($config['channel'])) {
+    if (!is_array($config) || !isset($config['token']) || !isset($config['team']) || !isset($config['channel']) || !isset($config['base_uri'])) {
         throw new \RuntimeException("Please configure new slack: set('slack', ['token' => 'xoxp...', 'team' => 'team', 'channel' => '#channel', 'messsage' => 'message to send']);");
     }
 
@@ -63,7 +68,7 @@ task('deploy:slack', function () {
         $urlParams['icon_url'] = $config['icon_url'];
     }
 
-    $url = 'https://slack.com/api/chat.postMessage?' . http_build_query($urlParams);
+    $url = $config['base_uri'] . '?' . http_build_query($urlParams);
     $result = @file_get_contents($url);
 
     if (!$result) {

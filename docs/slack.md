@@ -37,6 +37,19 @@ set('slack', [
 ]);
 ```
 
+This task also supports slack-esque API endpoints, such as [mattermost](https://www.mattermost.org/).
+
+To use, for example, a private mattermost instance, set the `base_uri` option in the
+config array.
+
+```php
+set('slack', [
+    'base_uri' => 'https://mattermost.my-shiny-inc.com/hooks/abc123cde',
+    'team'  => 'team name',
+    'app'   => 'app name',
+]);
+```
+
 ### Tasks
 
 - `deploy:slack` send message to slack
